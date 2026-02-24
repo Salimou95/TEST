@@ -7,6 +7,10 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'dev-secret-key-change-in-produ
 DEBUG = os.environ.get('DJANGO_DEBUG', '0') == '1'
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
+# Automatically allow all Heroku subdomains when deployed on Heroku
+if os.environ.get('DYNO'):
+    ALLOWED_HOSTS.append('.herokuapp.com')
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
