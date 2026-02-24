@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Paiement | E-Shop{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow text-center p-4">
+            <div class="mb-3">
+                <i class="bi bi-credit-card display-1 text-warning"></i>
+            </div>
+            <h3 class="fw-bold">Simulation de paiement</h3>
+            <p class="text-muted mb-4">
+                Commande <strong>#{{ order.id }}</strong> &mdash; Montant total :
+                <strong class="text-success">{{ order.get_total_cost }} €</strong>
+            </p>
+            <div class="alert alert-info text-start">
+                <i class="bi bi-info-circle"></i>
+                Ceci est une simulation de paiement. Aucune transaction réelle ne sera effectuée.
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3 text-start">
+                    <label class="form-label">Numéro de carte (simulation)</label>
+                    <input type="text" class="form-control" value="4242 4242 4242 4242" readonly>
+                </div>
+                <div class="row g-2 mb-3">
+                    <div class="col-6 text-start">
+                        <label class="form-label">Expiration</label>
+                        <input type="text" class="form-control" value="12/28" readonly>
+                    </div>
+                    <div class="col-6 text-start">
+                        <label class="form-label">CVV</label>
+                        <input type="text" class="form-control" value="123" readonly>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success btn-lg w-100">
+                    <i class="bi bi-lock"></i> Confirmer le paiement (simulation)
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

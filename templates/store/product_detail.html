@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ product.name }} | E-Shop{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'store:product_list' %}">Produits</a></li>
+        <li class="breadcrumb-item">
+            <a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a>
+        </li>
+        <li class="breadcrumb-item active">{{ product.name }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <!-- Product image -->
+    <div class="col-md-5 mb-4">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded shadow">
+        {% else %}
+        <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="height:380px">
+            <i class="bi bi-image text-white" style="font-size:5rem"></i>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Product info -->
+    <div class="col-md-7">
+        <span class="badge bg-secondary mb-2">{{ product.category.name }}</span>
+        <h2 class="fw-bold">{{ product.name }}</h2>
+        <p class="text-muted">{{ product.description }}</p>
+        <hr>
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <span class="fs-3 fw-bold text-success">{{ product.price }} €</span>
+            {% if product.is_in_stock %}
+            <span class="badge bg-success fs-6">
+                <i class="bi bi-check-circle"></i> En stock ({{ product.stock }})
+            </span>
+            {% else %}
+            <span class="badge bg-danger fs-6">
+                <i class="bi bi-x-circle"></i> Rupture de stock
+            </span>
+            {% endif %}
+        </div>
+
+        {% if product.is_in_stock %}
+        <form action="{% url 'cart:cart_add' product.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="override" value="false">
+            <div class="d-flex align-items-center gap-3">
+                <div class="input-group" style="width: 130px;">
+                    <label class="input-group-text" for="quantity">Qté</label>
+                    <select name="quantity" id="quantity" class="form-select">
+                        {% for i in "12345678910"|make_list %}
+                        <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-warning btn-lg">
+                    <i class="bi bi-cart-plus"></i> Ajouter au panier
+                </button>
+            </div>
+        </form>
+        {% endif %}
+
+        <a href="{% url 'store:product_list' %}" class="btn btn-outline-secondary mt-3">
+            <i class="bi bi-arrow-left"></i> Retour aux produits
+        </a>
+    </div>
+</div>
+{% endblock %}
