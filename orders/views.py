@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from cart.cart import Cart
 from .models import Order, OrderItem
@@ -32,7 +32,7 @@ def order_create(request):
 
 @login_required
 def order_created(request, order_id):
-    order = Order.objects.get(id=order_id, user=request.user)
+    order = get_object_or_404(Order, id=order_id, user=request.user)
     return render(request, 'orders/order_created.html', {'order': order})
 
 
