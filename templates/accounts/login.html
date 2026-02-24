@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Connexion – ShopDjango{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5 col-lg-4">
+    <div class="card shadow-sm">
+      <div class="card-header bg-dark text-white text-center fw-bold fs-5">
+        <i class="bi bi-box-arrow-in-right"></i> Connexion
+      </div>
+      <div class="card-body p-4">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nom d'utilisateur</label>
+            <input type="text" name="username" class="form-control
+              {% if form.username.errors %}is-invalid{% endif %}" required autofocus>
+            {% for error in form.username.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Mot de passe</label>
+            <input type="password" name="password" class="form-control
+              {% if form.password.errors %}is-invalid{% endif %}" required>
+            {% for error in form.password.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+          {% if form.non_field_errors %}
+          <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+          {% endif %}
+          <div class="d-grid">
+            <button type="submit" class="btn btn-dark">Se connecter</button>
+          </div>
+        </form>
+        <hr>
+        <p class="text-center mb-0">Pas encore de compte ? <a href="{% url 'accounts:register' %}">S'inscrire</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

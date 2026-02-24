@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Mon profil – ShopDjango{% endblock %}
+
+{% block content %}
+<h3 class="mb-4"><i class="bi bi-person-circle"></i> Mon profil</h3>
+<div class="row g-4">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-header fw-bold bg-dark text-white">Informations personnelles</div>
+      <div class="card-body">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {% for field in u_form %}
+          <div class="mb-3">
+            <label class="form-label fw-semibold">{{ field.label }}</label>
+            <input type="{{ field.field.widget.input_type }}"
+                   name="{{ field.html_name }}"
+                   class="form-control {% if field.errors %}is-invalid{% endif %}"
+                   value="{{ field.value|default_if_none:'' }}">
+            {% for error in field.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+          {% endfor %}
+          {% for field in p_form %}
+          <div class="mb-3">
+            <label class="form-label fw-semibold">{{ field.label }}</label>
+            {% if field.field.widget.input_type == 'textarea' %}
+            <textarea name="{{ field.html_name }}" class="form-control {% if field.errors %}is-invalid{% endif %}" rows="3">{{ field.value|default_if_none:'' }}</textarea>
+            {% else %}
+            <input type="{{ field.field.widget.input_type }}"
+                   name="{{ field.html_name }}"
+                   class="form-control {% if field.errors %}is-invalid{% endif %}"
+                   value="{{ field.value|default_if_none:'' }}">
+            {% endif %}
+            {% for error in field.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-dark">Enregistrer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-header fw-bold bg-dark text-white">Mes dernières commandes</div>
+      <div class="card-body">
+        <a href="{% url 'orders:order_list' %}" class="btn btn-outline-dark">
+          <i class="bi bi-bag-check"></i> Voir mes commandes
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
