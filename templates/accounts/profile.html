@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div style="max-width:500px; margin:0 auto; background:white; padding:2rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+    <h2>Your Profile</h2>
+    <p style="color:#777; margin-bottom:1rem;">Logged in as <strong>{{ user.username }}</strong></p>
+    <form method="post" style="margin-top:1rem;">
+        {% csrf_token %}
+        {% for field in form %}
+        <div style="margin-bottom:1rem;">
+            <label style="display:block; margin-bottom:0.3rem;">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<p style="color:#e74c3c; font-size:0.85rem;">{{ field.errors|join:", " }}</p>{% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+    <p style="margin-top:1rem;"><a href="{% url 'orders:order_history' %}">View Order History</a></p>
+</div>
+{% endblock %}

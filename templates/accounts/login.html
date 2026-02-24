@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div style="max-width:400px; margin:0 auto; background:white; padding:2rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+    <h2>Login</h2>
+    <form method="post" style="margin-top:1rem;">
+        {% csrf_token %}
+        {% for field in form %}
+        <div style="margin-bottom:1rem;">
+            <label style="display:block; margin-bottom:0.3rem;">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<p style="color:#e74c3c; font-size:0.85rem;">{{ field.errors|join:", " }}</p>{% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary" style="width:100%;">Login</button>
+    </form>
+    <p style="margin-top:1rem; text-align:center;">Don't have an account? <a href="{% url 'accounts:register' %}">Register</a></p>
+</div>
+{% endblock %}

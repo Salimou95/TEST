@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<div style="display:flex; gap:2rem;">
+    <div style="flex:2; background:white; padding:2rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+        <h2>Checkout</h2>
+        <form method="post" style="margin-top:1rem;">
+            {% csrf_token %}
+            {% for field in form %}
+            <div style="margin-bottom:1rem;">
+                <label style="display:block; margin-bottom:0.3rem;">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}<p style="color:#e74c3c; font-size:0.85rem;">{{ field.errors|join:", " }}</p>{% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-success" style="width:100%; padding:0.75rem;">Place Order</button>
+        </form>
+    </div>
+    <div style="flex:1; background:white; padding:2rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); align-self:start;">
+        <h3>Order Summary</h3>
+        {% for item in cart %}
+        <div style="display:flex; justify-content:space-between; margin:0.5rem 0; border-bottom:1px solid #eee; padding-bottom:0.5rem;">
+            <span>{{ item.product.name }} x{{ item.quantity }}</span>
+            <span>${{ item.total_price|floatformat:2 }}</span>
+        </div>
+        {% endfor %}
+        <div style="display:flex; justify-content:space-between; font-weight:bold; margin-top:1rem;">
+            <span>Total:</span>
+            <span style="color:#e74c3c;">${{ cart.get_total_price|floatformat:2 }}</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

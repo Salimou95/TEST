@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<div style="background:white; border-radius:8px; padding:2rem; box-shadow:0 2px 4px rgba(0,0,0,0.1); max-width:800px;">
+    <a href="{% url 'store:product_list' %}" style="color:#2c3e50;">&larr; Back to products</a>
+    <div style="display:flex; gap:2rem; margin-top:1.5rem;">
+        <div style="flex:1;">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:100%; border-radius:8px;">
+            {% else %}
+            <div style="width:100%; height:300px; background:#ecf0f1; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#aaa;">No image</div>
+            {% endif %}
+        </div>
+        <div style="flex:1;">
+            <h1>{{ product.name }}</h1>
+            <p style="color:#777; margin:0.5rem 0;">Category: {{ product.category.name }}</p>
+            <p style="color:#e74c3c; font-size:1.5rem; font-weight:bold; margin:1rem 0;">${{ product.price }}</p>
+            <p>{{ product.description }}</p>
+            <p style="margin-top:1rem;">Stock: {{ product.stock }}</p>
+            {% if product.stock > 0 %}
+            <form method="post" action="{% url 'cart:cart_add' product.id %}" style="margin-top:1rem;">
+                {% csrf_token %}
+                <label>Quantity:
+                    <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" style="width:60px; padding:0.3rem; margin:0 0.5rem;">
+                </label>
+                <input type="hidden" name="override_quantity" value="False">
+                <button type="submit" class="btn btn-primary">Add to Cart</button>
+            </form>
+            {% else %}
+            <p style="color:#e74c3c; margin-top:1rem;">Out of stock</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

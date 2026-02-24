@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Shopping Cart{% endblock %}
+{% block content %}
+<h1>Shopping Cart</h1>
+{% if cart|length > 0 %}
+<table style="width:100%; background:white; border-radius:8px; border-collapse:collapse; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+    <thead>
+        <tr style="background:#2c3e50; color:white;">
+            <th style="padding:1rem; text-align:left;">Product</th>
+            <th style="padding:1rem; text-align:right;">Price</th>
+            <th style="padding:1rem; text-align:center;">Quantity</th>
+            <th style="padding:1rem; text-align:right;">Total</th>
+            <th style="padding:1rem;"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in cart %}
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:1rem;">{{ item.product.name }}</td>
+            <td style="padding:1rem; text-align:right;">${{ item.price }}</td>
+            <td style="padding:1rem; text-align:center;">
+                <form method="post" action="{% url 'cart:cart_add' item.product.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" style="width:60px; padding:0.3rem; text-align:center;">
+                    <input type="hidden" name="override_quantity" value="True">
+                    <button type="submit" class="btn btn-primary" style="padding:0.3rem 0.6rem;">Update</button>
+                </form>
+            </td>
+            <td style="padding:1rem; text-align:right;">${{ item.total_price|floatformat:2 }}</td>
+            <td style="padding:1rem; text-align:center;">
+                <form method="post" action="{% url 'cart:cart_remove' item.product.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Remove</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" style="padding:1rem; text-align:right; font-weight:bold;">Total:</td>
+            <td style="padding:1rem; text-align:right; font-weight:bold; color:#e74c3c;">${{ cart.get_total_price|floatformat:2 }}</td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+<div style="margin-top:1rem; text-align:right;">
+    <a href="{% url 'store:product_list' %}" class="btn btn-primary">Continue Shopping</a>
+    <a href="{% url 'orders:order_create' %}" class="btn btn-success" style="margin-left:0.5rem;">Checkout</a>
+</div>
+{% else %}
+<div style="background:white; padding:2rem; border-radius:8px; text-align:center;">
+    <p>Your cart is empty.</p>
+    <a href="{% url 'store:product_list' %}" class="btn btn-primary" style="margin-top:1rem;">Shop Now</a>
+</div>
+{% endif %}
+{% endblock %}
