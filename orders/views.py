@@ -8,7 +8,7 @@ from .forms import OrderCreateForm
 @login_required
 def order_create(request):
     cart = Cart(request)
-    if not cart:
+    if len(cart) == 0:
         return redirect('cart:cart_detail')
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)
