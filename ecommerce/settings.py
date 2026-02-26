@@ -10,6 +10,7 @@ ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').sp
 # Automatically allow all Heroku subdomains when deployed on Heroku
 if os.environ.get('DYNO'):
     ALLOWED_HOSTS.append('.herokuapp.com')
+    CSRF_TRUSTED_ORIGINS = ['https://*.herokuapp.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -87,6 +88,11 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Serve the built React app's assets at the root URL via WhiteNoise
+_react_dist = os.path.join(BASE_DIR, 'frontend', 'dist')
+if os.path.isdir(_react_dist):
+    WHITENOISE_ROOT = _react_dist
 
 # Media files
 MEDIA_URL = '/media/'

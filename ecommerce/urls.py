@@ -1,9 +1,10 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.middleware.csrf import get_token
-from django.http import JsonResponse
+from django.http import FileResponse, HttpResponse, JsonResponse
+import os
 
 # Store API URLs
 from store.api_views import CategoryListAPIView, ProductListAPIView, ProductDetailAPIView
@@ -21,6 +22,17 @@ from orders.api_views import OrderCreateAPIView, OrderHistoryAPIView, OrderDetai
 def csrf_token_view(request):
     """Return a CSRF token so the React frontend can include it in requests."""
     return JsonResponse({'csrfToken': get_token(request)})
+
+
+def serve_react(request):
+    """Serve the React SPA index.html for all non-API routes."""
+    index_file = os.path.join(settings.BASE_DIR, 'frontend', 'dist', 'index.html')
+    if os.path.exists(index_file):
+        return FileResponse(open(index_file, 'rb'), content_type='text/html')
+    return HttpResponse(
+        'React app not built. Run: cd frontend && npm run build',
+        status=503,
+    )
 
 
 api_patterns = [
@@ -49,6 +61,7 @@ api_patterns = [
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(api_patterns)),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
+    # Catch-all: serve the React SPA for any unmatched route
+    re_path(r'^.*$', serve_react, name='react-app'),
+]
