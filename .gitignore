@@ -2,8 +2,8 @@
 __pycache__/
 *.sqlite3
 db.sqlite3
-staticfiles/
-media/
+backend/staticfiles/
+backend/media/
 .env
 *.log
 frontend/node_modules/

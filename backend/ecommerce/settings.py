@@ -90,7 +90,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Serve the built React app's assets at the root URL via WhiteNoise
-_react_dist = os.path.join(BASE_DIR, 'frontend', 'dist')
+_react_dist = os.path.join(BASE_DIR, '..', 'frontend', 'dist')
 if os.path.isdir(_react_dist):
     WHITENOISE_ROOT = _react_dist
 
