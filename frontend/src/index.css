@@ -1,0 +1,27 @@
+:root {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+a {
+  color: #0f3460;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #e94560;
+}
+
+h1, h2, h3 {
+  line-height: 1.3;
+}
+
