@@ -26,7 +26,7 @@ def csrf_token_view(request):
 
 def serve_react(request):
     """Serve the React SPA index.html for all non-API routes."""
-    index_file = os.path.join(settings.BASE_DIR, 'frontend', 'dist', 'index.html')
+    index_file = os.path.join(settings.BASE_DIR, '..', 'frontend', 'dist', 'index.html')
     if os.path.exists(index_file):
         return FileResponse(open(index_file, 'rb'), content_type='text/html')
     return HttpResponse(
